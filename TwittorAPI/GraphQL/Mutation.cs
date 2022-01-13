@@ -426,6 +426,8 @@ namespace TwittorAPI.GraphQL
             return await Task.FromResult(ret);
         }
 
+        //===== *User* =====
+
         //Register
         public async Task<UserData> RegisterUserAsync(
             RegisterUser input,
@@ -455,6 +457,40 @@ namespace TwittorAPI.GraphQL
                 FullName = newUser.FullName
             });
         }
+
+        //Update Password
+        [Authorize(Roles = new[] { "MEMBER", "ADMIN" })]
+        public async Task<TransactionStatus> UpdateUserPasswordAsync(
+            int id,
+            UpdatePasswordInput input,
+            [Service] TwittorDbContext context,
+            [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var user = context.Users.Where(o => o.Id == id).FirstOrDefault();
+            if (user == null) return await Task.FromResult(new TransactionStatus(false, "User not found"));
+
+            if (user != null)
+            {
+                var valid = BCrypt.Net.BCrypt.Verify(input.oldPassword, user.Password);
+                if (valid)
+                {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(input.newPassword);
+                }
+                else return new TransactionStatus(false, "Invalid password");
+            }
+
+            var key = "Update-User-Password-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(user).ToString(Formatting.None);
+            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "user-update", key, val);
+            await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
+
+            var ret = new TransactionStatus(result, "");
+            if (!result)
+                ret = new TransactionStatus(result, "Failed to submit data");
+
+            return await Task.FromResult(ret);
+        }
+
 
         //Login
         public async Task<UserToken> LoginAsync(
@@ -502,5 +538,6 @@ namespace TwittorAPI.GraphQL
 
             return await Task.FromResult(new UserToken(null, null, Message: "Username or password was invalid"));
         }
+
     }
 }
