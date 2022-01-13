@@ -4,6 +4,7 @@
     (
        int? Id,
        int UserId,
-       string Name
+       string Name,
+       int Age
     );
 }

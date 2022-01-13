@@ -13,12 +13,13 @@ namespace TwittorAPI.GraphQL
     public class Mutation
     {
         //Add Twit
-        public async Task<TransactionStatus> AddTwitAsync(
+        public async Task<TransactionStatus> AddTwittorAsync(
             TwittorInput input,
             [Service] IOptions<KafkaSettings> kafkaSettings)
         {
             var twittor = new Twittor
             {
+                UserId = input.UserId,
                 Twit = input.Twit,
                 Created = DateTime.Now
             };
@@ -41,6 +42,7 @@ namespace TwittorAPI.GraphQL
         {
             var comment = new Comment
             {
+                UserId = input.UserId,
                 TwitId = input.TwitId,
                 Comments = input.Comments,
                 Created = DateTime.Now
@@ -90,7 +92,8 @@ namespace TwittorAPI.GraphQL
             var profile = new Profile
             {
                 UserId = input.UserId,
-                Name = input.Name
+                Name = input.Name,
+                Age = input.Age
             };
             var key = "profile-add-" + DateTime.Now.ToString();
             var val = JObject.FromObject(profile).ToString(Formatting.None);
@@ -115,6 +118,7 @@ namespace TwittorAPI.GraphQL
             {
                 profile.UserId = input.UserId;
                 profile.Name = input.Name;
+                profile.Age = input.Age;
 
                 context.Profiles.Update(profile);
                 await context.SaveChangesAsync();
