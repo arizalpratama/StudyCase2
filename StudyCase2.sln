@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwittorAPI", "TwittorAPI\TwittorAPI.csproj", "{FCC3F5E2-9FAD-45A4-98AC-2F1A7A6C00C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwittorAPI", "TwittorAPI\TwittorAPI.csproj", "{FCC3F5E2-9FAD-45A4-98AC-2F1A7A6C00C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaApp", "KafkaApp\KafkaApp.csproj", "{578D95C2-0B73-4A5D-B181-B22B7F10806D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaApp", "KafkaApp\KafkaApp.csproj", "{578D95C2-0B73-4A5D-B181-B22B7F10806D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaCreateTopics", "KafkaCreateTopics\KafkaCreateTopics.csproj", "{F666339F-B0E0-4118-883C-549768284C69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaCreateTopics", "KafkaCreateTopics\KafkaCreateTopics.csproj", "{F666339F-B0E0-4118-883C-549768284C69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaListeningApp", "KafkaListeningApp\KafkaListeningApp.csproj", "{092F8C60-75F2-42D5-AD99-CF9296994E80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaListeningApp", "KafkaListeningApp\KafkaListeningApp.csproj", "{092F8C60-75F2-42D5-AD99-CF9296994E80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
