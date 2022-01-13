@@ -1,4 +1,4 @@
-﻿namespace ShoppingAPI.Models
+﻿namespace TwittorAPI.Models
 {
     public class KafkaSettings
     {
