@@ -43,7 +43,7 @@ namespace TwittorAPI.Models
 
                 entity.Property(e => e.Comments)
                     .IsRequired()
-                    .HasMaxLength(255)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Created).HasColumnType("datetime");
@@ -53,6 +53,12 @@ namespace TwittorAPI.Models
                     .HasForeignKey(d => d.TwitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Twittor");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Comment_User");
             });
 
             modelBuilder.Entity<Profile>(entity =>
@@ -89,8 +95,14 @@ namespace TwittorAPI.Models
 
                 entity.Property(e => e.Twit)
                     .IsRequired()
-                    .HasMaxLength(255)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Twittors)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Twittor_User");
             });
 
             modelBuilder.Entity<User>(entity =>
