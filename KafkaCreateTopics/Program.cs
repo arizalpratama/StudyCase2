@@ -25,8 +25,8 @@ namespace KafkaCreateTopics
             topics.Add("twittor-delete");
             topics.Add("profile-add");
             topics.Add("profile-update");
-            /*topics.Add("userrole-add");
-            topics.Add("userrole-update");*/
+            topics.Add("userrole-add");
+            topics.Add("userrole-update");
 
             foreach (var topic in topics)
             {
