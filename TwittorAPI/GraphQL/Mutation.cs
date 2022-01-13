@@ -17,10 +17,13 @@ namespace TwittorAPI.GraphQL
 {
     public class Mutation
     {
-        //Add Twit
-        public async Task<TransactionStatus> AddTwittorAsync(
+
+        //===== *Twittor* =====//
+
+        //Add Twit Payload
+        public async Task<AddTwittorPayload> AddTwittorPayloadAsync(
             TwittorInput input,
-            [Service] IOptions<KafkaSettings> kafkaSettings)
+            [Service] TwittorDbContext context)
         {
             var twittor = new Twittor
             {
@@ -28,7 +31,26 @@ namespace TwittorAPI.GraphQL
                 Twit = input.Twit,
                 Created = DateTime.Now
             };
-            var key = "twittor-add-" + DateTime.Now.ToString();
+
+            context.Twittors.Add(twittor);
+            await context.SaveChangesAsync();
+
+            return new AddTwittorPayload(twittor);
+        }
+
+        //Add Twit Kafka
+        public async Task<TransactionStatus> AddTwittorAsync(
+           TwittorInput input,
+           [Service] TwittorDbContext context,
+           [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var twittor = new Twittor
+            {
+                UserId = input.UserId,
+                Twit = input.Twit,
+                Created = DateTime.Now
+            };
+            var key = "Add-Twit-" + DateTime.Now.ToString();
             var val = JObject.FromObject(twittor).ToString(Formatting.None);
             var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "twittor-add", key, val);
             await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
@@ -40,26 +62,31 @@ namespace TwittorAPI.GraphQL
             return await Task.FromResult(ret);
         }
 
-        //Add Comment
-        public async Task<TransactionStatus> AddCommentAsync(
-            CommentInput input,
+        //Update Twit
+        public async Task<TransactionStatus> UpdateTwittorAsync(
+            TwittorInput input,
+            [Service] TwittorDbContext context,
             [Service] IOptions<KafkaSettings> kafkaSettings)
         {
-            var comment = new Comment
+            var twittor = context.Twittors.Where(o => o.Id == input.Id).FirstOrDefault();
+            if (twittor != null)
             {
-                UserId = input.UserId,
-                TwitId = input.TwitId,
-                Comments = input.Comments,
-                Created = DateTime.Now
-            };
-            var key = "comment-add-" + DateTime.Now.ToString();
-            var val = JObject.FromObject(comment).ToString(Formatting.None);
-            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "comment-add", key, val);
+                twittor.UserId = input.UserId;
+                twittor.Twit = input.Twit;
+                twittor.Created = DateTime.Now;
+
+                context.Twittors.Update(twittor);
+                await context.SaveChangesAsync();
+            }
+            var key = "twittor-update-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(twittor).ToString(Formatting.None);
+            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "profile-update", key, val);
             await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
 
             var ret = new TransactionStatus(result, "");
             if (!result)
-                ret = new TransactionStatus(result, "Failed to submit data");
+                ret = new TransactionStatus(result, "Failed to update data");
+
 
             return await Task.FromResult(ret);
         }
@@ -87,6 +114,126 @@ namespace TwittorAPI.GraphQL
 
 
             return await Task.FromResult(ret);
+        }
+
+        //===== *Comment* =====//
+
+        //Add Comment Payload
+        public async Task<AddCommentPayload> AddCommentPayloadAsync(
+            CommentInput input,
+            [Service] TwittorDbContext context)
+        {
+            var comment = new Comment
+            {
+                UserId = input.UserId,
+                TwitId = input.TwitId,
+                Comments = input.Comments,
+                Created = DateTime.Now
+            };
+
+            context.Comments.Add(comment);
+            await context.SaveChangesAsync();
+
+            return new AddCommentPayload(comment);
+        }
+
+        //Add Comment Kafka
+        public async Task<TransactionStatus> AddCommentAsync(
+            CommentInput input,
+            [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var comment = new Comment
+            {
+                UserId = input.UserId,
+                TwitId = input.TwitId,
+                Comments = input.Comments,
+                Created = DateTime.Now
+            };
+            var key = "comment-add-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(comment).ToString(Formatting.None);
+            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "comment-add", key, val);
+            await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
+
+            var ret = new TransactionStatus(result, "");
+            if (!result)
+                ret = new TransactionStatus(result, "Failed to submit data");
+
+            return await Task.FromResult(ret);
+        }
+
+        //Update Comment
+        public async Task<TransactionStatus> UpdateCommentAsync(
+            CommentInput input,
+            [Service] TwittorDbContext context,
+            [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var comment = context.Comments.Where(o => o.Id == input.Id).FirstOrDefault();
+            if (comment != null)
+            {
+                comment.UserId = input.UserId;
+                comment.TwitId = input.TwitId;
+                comment.Comments = input.Comments;
+                comment.Created = DateTime.Now;
+
+                context.Comments.Update(comment);
+                await context.SaveChangesAsync();
+            }
+            var key = "comment-update-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(comment).ToString(Formatting.None);
+            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "profile-update", key, val);
+            await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
+
+            var ret = new TransactionStatus(result, "");
+            if (!result)
+                ret = new TransactionStatus(result, "Failed to update data");
+
+
+            return await Task.FromResult(ret);
+        }
+
+        //Delete Comment
+        public async Task<TransactionStatus> DeleteCommentByIdAsync(
+          int id,
+          [Service] TwittorDbContext context,
+          [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var comment = context.Comments.Where(o => o.Id == id).FirstOrDefault();
+            if (comment != null)
+            {
+                context.Comments.Remove(comment);
+                await context.SaveChangesAsync();
+            }
+            var key = "comment-delete-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(comment).ToString(Formatting.None);
+            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "twittor-delete", key, val);
+            await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
+
+            var ret = new TransactionStatus(result, "");
+            if (!result)
+                ret = new TransactionStatus(result, "Failed to delete data");
+
+
+            return await Task.FromResult(ret);
+        }
+
+        //===== *Profile* =====//
+
+        //Add Profile Payload
+        public async Task<AddProfilePayload> AddProfilePayloadAsync(
+            ProfileInput input,
+            [Service] TwittorDbContext context)
+        {
+            var profile = new Profile
+            {
+                UserId = input.UserId,
+                Name = input.Name,
+                Age = input.Age
+            };
+
+            context.Profiles.Add(profile);
+            await context.SaveChangesAsync();
+
+            return new AddProfilePayload(profile);
         }
 
         //Add Profile
@@ -141,11 +288,54 @@ namespace TwittorAPI.GraphQL
             return await Task.FromResult(ret);
         }
 
+        //Delete Profile
+        public async Task<TransactionStatus> DeleteProfileByIdAsync(
+          int id,
+          [Service] TwittorDbContext context,
+          [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var profile = context.Profiles.Where(o => o.Id == id).FirstOrDefault();
+            if (profile != null)
+            {
+                context.Profiles.Remove(profile);
+                await context.SaveChangesAsync();
+            }
+            var key = "profile-delete-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(profile).ToString(Formatting.None);
+            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "twittor-delete", key, val);
+            await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
+
+            var ret = new TransactionStatus(result, "");
+            if (!result)
+                ret = new TransactionStatus(result, "Failed to delete data");
+
+
+            return await Task.FromResult(ret);
+        }
+
+
+        //===== *User Role* =====//
+
+        //Add User Role Payload
+        public async Task<AddUserRolePayload> AddUserRolePayloadAsync(
+            UserRoleInput input,
+            [Service] TwittorDbContext context)
+        {
+            var userrole = new UserRole
+            {
+                UserId = input.UserId,
+                RoleId = input.UserId
+            };
+
+            context.UserRoles.Add(userrole);
+            await context.SaveChangesAsync();
+
+            return new AddUserRolePayload(userrole);
+        }
 
         //Add User Role
         public async Task<TransactionStatus> AddUserRoleAsync(
             UserRoleInput input,
-            [Service] TwittorDbContext context,
             [Service] IOptions<KafkaSettings> kafkaSettings)
         {
             var userrole = new UserRole
@@ -189,6 +379,31 @@ namespace TwittorAPI.GraphQL
             var ret = new TransactionStatus(result, "");
             if (!result)
                 ret = new TransactionStatus(result, "Failed to update data");
+
+
+            return await Task.FromResult(ret);
+        }
+
+        //Delete User Role
+        public async Task<TransactionStatus> DeleteUserRoleByIdAsync(
+          int id,
+          [Service] TwittorDbContext context,
+          [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var userrole = context.UserRoles.Where(o => o.Id == id).FirstOrDefault();
+            if (userrole != null)
+            {
+                context.UserRoles.Remove(userrole);
+                await context.SaveChangesAsync();
+            }
+            var key = "userrole-delete-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(userrole).ToString(Formatting.None);
+            var result = await KafkaHelper.SendMessage(kafkaSettings.Value, "twittor-delete", key, val);
+            await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
+
+            var ret = new TransactionStatus(result, "");
+            if (!result)
+                ret = new TransactionStatus(result, "Failed to delete data");
 
 
             return await Task.FromResult(ret);
