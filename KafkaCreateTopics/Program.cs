@@ -27,6 +27,7 @@ namespace KafkaCreateTopics
             topics.Add("profile-update");
             topics.Add("userrole-add");
             topics.Add("userrole-update");
+            topics.Add("user-update");
 
             foreach (var topic in topics)
             {
