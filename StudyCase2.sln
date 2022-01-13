@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaApp", "KafkaApp\KafkaA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaCreateTopics", "KafkaCreateTopics\KafkaCreateTopics.csproj", "{F666339F-B0E0-4118-883C-549768284C69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaListeningApp", "KafkaListeningApp\KafkaListeningApp.csproj", "{092F8C60-75F2-42D5-AD99-CF9296994E80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F666339F-B0E0-4118-883C-549768284C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F666339F-B0E0-4118-883C-549768284C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F666339F-B0E0-4118-883C-549768284C69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{092F8C60-75F2-42D5-AD99-CF9296994E80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{092F8C60-75F2-42D5-AD99-CF9296994E80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{092F8C60-75F2-42D5-AD99-CF9296994E80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{092F8C60-75F2-42D5-AD99-CF9296994E80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
