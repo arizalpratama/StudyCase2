@@ -1,4 +1,5 @@
 ﻿using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -21,6 +22,7 @@ namespace TwittorAPI.GraphQL
         //===== *Twittor* =====//
 
         //Add Twit Payload
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<AddTwittorPayload> AddTwittorPayloadAsync(
             TwittorInput input,
             [Service] TwittorDbContext context)
@@ -39,6 +41,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Add Twit Kafka
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> AddTwittorAsync(
            TwittorInput input,
            [Service] TwittorDbContext context,
@@ -63,6 +66,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Update Twit
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> UpdateTwittorAsync(
             TwittorInput input,
             [Service] TwittorDbContext context,
@@ -92,6 +96,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Delete Twit
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> DeleteTwitByIdAsync(
           int id,
           [Service] TwittorDbContext context,
@@ -119,6 +124,7 @@ namespace TwittorAPI.GraphQL
         //===== *Comment* =====//
 
         //Add Comment Payload
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<AddCommentPayload> AddCommentPayloadAsync(
             CommentInput input,
             [Service] TwittorDbContext context)
@@ -138,6 +144,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Add Comment Kafka
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> AddCommentAsync(
             CommentInput input,
             [Service] IOptions<KafkaSettings> kafkaSettings)
@@ -162,6 +169,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Update Comment
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> UpdateCommentAsync(
             CommentInput input,
             [Service] TwittorDbContext context,
@@ -192,6 +200,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Delete Comment
+        [Authorize(Roles = new[] { "MEMBER" })]
         public async Task<TransactionStatus> DeleteCommentByIdAsync(
           int id,
           [Service] TwittorDbContext context,
@@ -219,6 +228,7 @@ namespace TwittorAPI.GraphQL
         //===== *Profile* =====//
 
         //Add Profile Payload
+        [Authorize(Roles = new[] { "ADMIN","MEMBER" })]
         public async Task<AddProfilePayload> AddProfilePayloadAsync(
             ProfileInput input,
             [Service] TwittorDbContext context)
@@ -237,6 +247,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Add Profile
+        [Authorize(Roles = new[] { "ADMIN", "MEMBER" })]
         public async Task<TransactionStatus> AddProfileAsync(
             ProfileInput input,
             [Service] IOptions<KafkaSettings> kafkaSettings)
@@ -260,6 +271,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Update Profile
+        [Authorize(Roles = new[] { "ADMIN", "MEMBER" })]
         public async Task<TransactionStatus> UpdateProfileAsync(
             ProfileInput input,
             [Service] TwittorDbContext context,
@@ -289,6 +301,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Delete Profile
+        [Authorize(Roles = new[] { "ADMIN", "MEMBER" })]
         public async Task<TransactionStatus> DeleteProfileByIdAsync(
           int id,
           [Service] TwittorDbContext context,
@@ -317,6 +330,7 @@ namespace TwittorAPI.GraphQL
         //===== *User Role* =====//
 
         //Add User Role Payload
+        [Authorize(Roles = new[] { "ADMIN"})]
         public async Task<AddUserRolePayload> AddUserRolePayloadAsync(
             UserRoleInput input,
             [Service] TwittorDbContext context)
@@ -334,6 +348,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Add User Role
+        [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<TransactionStatus> AddUserRoleAsync(
             UserRoleInput input,
             [Service] IOptions<KafkaSettings> kafkaSettings)
@@ -357,6 +372,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Update User Role
+        [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<TransactionStatus> UpdateUserRoleAsync(
             UserRoleInput input,
             [Service] TwittorDbContext context,
@@ -385,6 +401,7 @@ namespace TwittorAPI.GraphQL
         }
 
         //Delete User Role
+        [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<TransactionStatus> DeleteUserRoleByIdAsync(
           int id,
           [Service] TwittorDbContext context,
