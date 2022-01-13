@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwittorAPI", "TwittorAPI\TwittorAPI.csproj", "{FCC3F5E2-9FAD-45A4-98AC-2F1A7A6C00C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaApp", "KafkaApp\KafkaApp.csproj", "{578D95C2-0B73-4A5D-B181-B22B7F10806D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FCC3F5E2-9FAD-45A4-98AC-2F1A7A6C00C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCC3F5E2-9FAD-45A4-98AC-2F1A7A6C00C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCC3F5E2-9FAD-45A4-98AC-2F1A7A6C00C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{578D95C2-0B73-4A5D-B181-B22B7F10806D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578D95C2-0B73-4A5D-B181-B22B7F10806D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578D95C2-0B73-4A5D-B181-B22B7F10806D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578D95C2-0B73-4A5D-B181-B22B7F10806D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
