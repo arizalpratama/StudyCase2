@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Dockefile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Dockefile" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
     <PackageReference Include="Confluent.Kafka" Version="1.8.2" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.4.1" />
