@@ -48,6 +48,17 @@ namespace TwittorAPI.GraphQL
             return context.Profiles;
         }
 
+        //Get All User Role
+        public async Task<IQueryable<UserRole>> GetUserRoles(
+          [Service] TwittorDbContext context,
+          [Service] IOptions<KafkaSettings> kafkaSettings)
+        {
+            var key = "GetUserRole-" + DateTime.Now.ToString();
+            var val = JObject.FromObject(new { Message = "GraphQL Query GetUserRoles" }).ToString(Formatting.None);
+
+            await KafkaHelper.SendMessage(kafkaSettings.Value, "logging", key, val);
+            return context.UserRoles;
+        }
 
     }
 }
