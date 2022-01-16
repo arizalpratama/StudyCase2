@@ -2,9 +2,9 @@
 
 namespace TwittorAPI.GraphQL
 {
-    public class AddCommentPayload
+    public class CommentTweet
     {
-        public AddCommentPayload(Comment comment)
+        public CommentTweet(Comment comment)
         {
             Comment = comment;
         }

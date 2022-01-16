@@ -1,3 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TwittorAPI.Models;
+using TwittorAPI.GraphQL;
+using TwittorAPI.Kafka;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,13 +18,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TwittorAPI.GraphQL;
-using TwittorAPI.Models;
 
 namespace TwittorAPI
 {
@@ -32,7 +33,8 @@ namespace TwittorAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var conString = Configuration.GetConnectionString("MyDatabase");
+            //Connetion String
+            var conString = Configuration.GetConnectionString("Local");
 
             services.AddDbContext<TwittorDbContext>(options =>
                  options.UseSqlServer(conString)
@@ -44,20 +46,19 @@ namespace TwittorAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TwittorAPI", Version = "v1" });
             });
 
-            //Kafka Settings
             services.Configure<KafkaSettings>(Configuration.GetSection("KafkaSettings"));
 
-            // GraohQL
+            //GraphQL
             services
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
                 .AddAuthorization();
 
-            //Token Settings
+            services.AddControllers();
+            //Dependency Injection
             services.Configure<TokenSettings>(Configuration.GetSection("TokenSettings"));
 
-            //JWT Security
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>
                {
@@ -72,6 +73,7 @@ namespace TwittorAPI
                    };
 
                });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +83,7 @@ namespace TwittorAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShoppingAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TwittorAPI v1"));
             }
 
             app.UseHttpsRedirection();
@@ -89,7 +91,6 @@ namespace TwittorAPI
             app.UseRouting();
 
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

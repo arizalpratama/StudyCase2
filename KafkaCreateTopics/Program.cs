@@ -2,6 +2,7 @@
 using Confluent.Kafka.Admin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -19,15 +20,14 @@ namespace KafkaCreateTopics
             };
 
             var topics = new List<String>();
-            topics.Add("logging");
-            topics.Add("twittor-add");
-            topics.Add("comment-add");
-            topics.Add("twittor-delete");
-            topics.Add("profile-add");
-            topics.Add("profile-update");
-            topics.Add("userrole-add");
-            topics.Add("userrole-update");
-            topics.Add("user-update");
+            topics.Add("Logging");
+            topics.Add("Register");
+            topics.Add("ChangePassword");
+            topics.Add("AddTweet");
+            topics.Add("DeleteTweet");
+            topics.Add("EditProfile");
+            topics.Add("LockUser");
+            topics.Add("ChangeUserRole");
 
             foreach (var topic in topics)
             {
@@ -54,6 +54,8 @@ namespace KafkaCreateTopics
                     }
                 }
             }
+
+            Trace.Flush();
 
             return 0;
         }

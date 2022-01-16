@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Confluent.Kafka;
-using Confluent.Kafka.Admin;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TwittorAPI.Models;
+using Confluent.Kafka;
+using Confluent.Kafka.Admin;
 
 namespace TwittorAPI.Kafka
 {
