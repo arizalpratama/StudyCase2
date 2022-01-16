@@ -1,6 +1,12 @@
 # StudyCase2
 Microservices GraphQL
 
+Connection String:
+- Use 'Local' for development
+- Use 'Database' for container
+- Use 'localhost:9092' for kafka local
+- Use 'my-release-kafka:9092' for kafka container
+
 Kafka:
 - add file docker-compose.yaml
 - docker compose up
