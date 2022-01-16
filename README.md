@@ -1,6 +1,10 @@
 # StudyCase2
 Microservices GraphQL
 
+Kafka:
+- add file docker-compose.yaml
+- docker compose up
+
 Docker Build and Push:
 - docker build -t arizalpratama01/kafkaapp .
 - docker push arizalpratama01/kafkaapp
@@ -28,7 +32,6 @@ Kubernetes Apply:
 - kubectl apply local-pvc.yaml
 - kubectl apply -f mssql-plat-depl.yaml
 - kubectl apply -f ingress-srv.yaml
-- kubectl apply -f rabbitmq-depl.yaml
 
 Kubernetes Delete:
 - kubectl delete deployment kafkaapps-depl
@@ -39,4 +42,3 @@ Kubernetes Delete:
 - kubectl delete local-pvc
 - kubectl delete deployment mssql-depl
 - kubectl delete deployment ingress-srv
-- kubectl delete deployment rabbitmq-depl
